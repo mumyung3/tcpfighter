@@ -34,7 +34,7 @@ void NetIOProcess() {
 
 	if (iResult > 0) {
 		if (FD_ISSET(g_ListenSocket, &ReadSet)) {
-			//netProc_Accept();
+			netProc_Accept();
 		}
 
 		// 전체 세션 반응 확인

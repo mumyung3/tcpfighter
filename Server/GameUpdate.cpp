@@ -2,12 +2,6 @@
 #include "NetWorkIOProcess.h"
 
 void UpdateGame() {
-	// 50fps 타이밍 체크
-	static DWORD dwPrevTime = timeGetTime();
-	DWORD dwCurTime = timeGetTime();
-	if (dwCurTime - dwPrevTime < 1000 / 50) return;
-	dwPrevTime = dwCurTime;
-
 	for (auto it = g_PlayerList.begin(); it != g_PlayerList.end(); ++it) {
 		st_SESSION* pSession = &(*it);
 

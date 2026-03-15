@@ -50,8 +50,7 @@ void NetIOProcess() {
 				netProc_Send(pSession);
 			}
 
-			//지연 삭제
-			CleanupDisconnected();
+
 		}
 	}
 	else if (iResult == SOCKET_ERROR) {
@@ -63,6 +62,10 @@ void NetIOProcess() {
 		__debugbreak();
 		return;
 	}
+
+	//지연 삭제
+	CleanupDisconnected();
+
 
 }
 
@@ -79,7 +82,7 @@ void netProc_Accept() {
 	// g_playerlist 추가
 	st_SESSION* newSession = new st_SESSION();
 	newSession->Socket = clientSock;
-	newSession->dwSessionID = g_id++;
+	newSession->dwSessionID = g_id;
 
 	// 플레이어 생성 패킷 생성
 	PacketCreatePlayer Packet{};
@@ -101,6 +104,23 @@ void netProc_Accept() {
 	wprintf(L"클라 접속 : IP=%s PORT=%d ID=%d\n", newSession->ip, newSession->port, newSession->dwSessionID);
 
 
+	// 새 플레이어 -> 기존 클라 전송
+	PacketHeader NewHeader = CreatePacketHeader();
+	PacketCreateOtherPlayer NewPacket{};
+	CreatePacketOtherPlayer(&NewHeader, &NewPacket, Packet.ID, Packet.Direction, Packet.X, Packet.Y, Packet.HP);
+	SendBroadcast(newSession, &NewHeader, &NewPacket);
+
+	// 기존 플레이어 -> 새 클라 전송
+	for (auto it = g_PlayerList.begin(); it != g_PlayerList.end(); ++it) {
+		st_SESSION* pOther = &(*it);
+		if (pOther == newSession) continue;
+		PacketHeader OtherHeader = CreatePacketHeader();
+		PacketCreateOtherPlayer OtherPacket{};
+
+		CreatePacketOtherPlayer(&OtherHeader, &OtherPacket, pOther->dwSessionID, pOther->byDirection, pOther->shX, pOther->shY, pOther->chHP);
+		SendUnicast(newSession, &OtherHeader, &OtherPacket);
+	}
+	g_id++;
 
 }
 
@@ -290,7 +310,8 @@ bool netPacketProc_MoveStart(st_SESSION* pSession, char* pPacket) {
 	{
 		Disconnect(pSession);
 		// 로그출력
-		wprintf(L"오차 범위로 인한 연결끊기\n");
+		wprintf(L"오차범위 초과 - 서버X:%d 클X:%d 서버Y:%d 클Y:%d\n",
+			pSession->shX, pMove->X, pSession->shY, pMove->Y);
 		return false;
 	}
 
@@ -338,7 +359,9 @@ bool netPacketProc_MoveStop(st_SESSION* pSession, char* pPacket) {
 	{
 		Disconnect(pSession);
 		// 로그출력
-		wprintf(L"오차 범위로 인한 연결끊기\n");
+
+		wprintf(L"오차범위 초과 - 서버X:%d 클X:%d 서버Y:%d 클Y:%d\n",
+			pSession->shX, pStop->X, pSession->shY, pStop->Y);
 		return false;
 	}
 

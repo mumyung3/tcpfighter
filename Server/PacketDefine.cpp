@@ -22,13 +22,16 @@ void CreatePacketPlayer(PacketHeader* Header, PacketCreatePlayer* Player) {
 	Player->HP = 100;
 }
 
-void CreatePacketOtherPlayer(PacketHeader* Header, PacketCreateOtherPlayer* OtherPlayer, PacketCreatePlayer* Player) {
+void CreatePacketOtherPlayer(PacketHeader* Header, PacketCreateOtherPlayer* OtherPlayer, unsigned long ID, unsigned char Direction, unsigned short X, unsigned short Y, unsigned char HP) {
 	Header->byCode = 0x89;
 	Header->bySize = sizeof(PacketCreateOtherPlayer);
 	Header->byType = dfPACKET_SC_CREATE_OTHER_CHARACTER;
 
-	memcpy(OtherPlayer, Player, sizeof(PacketCreateOtherPlayer));
-	//OtherPlayer =  (PacketCreateOtherPlayer*)Player;
+	OtherPlayer->ID = ID;
+	OtherPlayer->Direction = Direction;
+	OtherPlayer->X = X;
+	OtherPlayer->Y = Y;
+	OtherPlayer->HP = HP;
 }
 
 void CreateDeletePacketPlayer(PacketHeader* Header, PacketDELETE* Player, unsigned long PlayerID) {

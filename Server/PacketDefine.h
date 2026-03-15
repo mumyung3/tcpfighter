@@ -95,8 +95,7 @@ struct PacketCreateOtherPlayer {
 };
 #pragma pack(pop)
 
-void CreatePacketOtherPlayer(PacketHeader* Header, PacketCreateOtherPlayer* OtherPlayer, PacketCreatePlayer* Player);
-
+void CreatePacketOtherPlayer(PacketHeader* Header, PacketCreateOtherPlayer* OtherPlayer, unsigned long ID, unsigned char Direction, unsigned short X, unsigned short Y, unsigned char HP);
 
 
 

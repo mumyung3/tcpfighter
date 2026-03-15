@@ -67,3 +67,7 @@ extern SOCKET g_ListenSocket;
 
 // 세션 id	 고유
 extern DWORD g_id;
+
+
+void cs_Initial(void);
+void cs_MoveCursor(int iPosX, int iPosY);

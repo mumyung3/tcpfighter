@@ -113,7 +113,7 @@ struct PacketDELETE {
 	unsigned long ID;
 };
 
-void CreateDeletePacketPlayer(PacketHeader * Header, PacketDELETE* Player, unsigned long PlayerID);
+void CreateDeletePacketPlayer(PacketHeader* Header, PacketDELETE* Player, unsigned long PlayerID);
 
 
 #define	dfPACKET_CS_MOVE_START					10
@@ -177,7 +177,7 @@ struct Packet_SC_Move_Start {
 };
 #pragma pack(pop)
 
-void CreatePacketSCMoveStart(PacketHeader* Header, Packet_SC_Move_Start* Move, unsigned long ID ,char Direction, unsigned short X, unsigned short Y);
+void CreatePacketSCMoveStart(PacketHeader* Header, Packet_SC_Move_Start* Move, unsigned long ID, char Direction, unsigned short X, unsigned short Y);
 
 
 
@@ -302,7 +302,6 @@ struct Packet_CS_ATTACK2 {
 	unsigned short Y;
 };
 #pragma pack(pop)
-
 
 
 #define	dfPACKET_SC_ATTACK2						23

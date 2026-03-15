@@ -18,6 +18,7 @@
 #include "GameUpdate.h"
 
 #define SERVERPORT 5000
+#define SERVERIP L"192.168.10.100"
 
 extern bool g_bShutdown;
 
@@ -30,7 +31,7 @@ struct st_SESSION {
 	RingBuffer RecvQ;	// 송수신 큐
 	RingBuffer SendQ;
 
-	DWORD dwAction;	
+	DWORD dwAction;
 
 	short shX;
 	short shY;
@@ -39,7 +40,7 @@ struct st_SESSION {
 
 	char chHP;
 	bool bDisconnect{};
-	
+
 	WCHAR   ip[16]{};
 	unsigned short port;
 	BYTE byDirection;

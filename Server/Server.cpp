@@ -12,7 +12,7 @@ SessionList g_PlayerList{};
 // 세션 id	 고유
 DWORD g_id = 0;
 
-int _tmain(int argc, _TCHAR * argv[])
+int _tmain(int argc, _TCHAR* argv[])
 {
 	//초기화 ();
 	timeBeginPeriod(1);
@@ -39,6 +39,7 @@ int _tmain(int argc, _TCHAR * argv[])
 	SOCKADDR_IN addr;
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(SERVERPORT);
+	//InetPton(AF_INET, SERVERIP, &addr.sin_addr);
 	addr.sin_addr.s_addr = htonl(INADDR_ANY);
 
 	if (bind(g_ListenSocket, (SOCKADDR*)&addr, sizeof(addr)) == SOCKET_ERROR) {
@@ -64,7 +65,7 @@ int _tmain(int argc, _TCHAR * argv[])
 
 
 	// 서버 종료 대기. 
-	
+
 	// 리슨 소켓 해제
 	closesocket(g_ListenSocket);
 	WSACleanup();

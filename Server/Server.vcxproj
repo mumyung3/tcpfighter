@@ -127,17 +127,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\selectserver\SelectModelServer\ringbuffer.h" />
     <ClInclude Include="GameUpdate.h" />
     <ClInclude Include="NetWorkIOProcess.h" />
     <ClInclude Include="PacketDefine.h" />
+    <ClInclude Include="ringbuffer.h" />
     <ClInclude Include="Server.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\selectserver\SelectModelServer\ringbuffer.cpp" />
     <ClCompile Include="GameUpdate.cpp" />
     <ClCompile Include="NetWorkIOProcess.cpp" />
     <ClCompile Include="PacketDefine.cpp" />
+    <ClCompile Include="ringbuffer.cpp" />
     <ClCompile Include="Server.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

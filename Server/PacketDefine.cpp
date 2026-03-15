@@ -11,7 +11,7 @@ PacketHeader CreatePacketHeader() {
 	return Packet;
 }
 
-void CreatePacketPlayer(PacketHeader* Header,PacketCreatePlayer* Player) {
+void CreatePacketPlayer(PacketHeader* Header, PacketCreatePlayer* Player) {
 	Header->byCode = 0x89;
 	Header->bySize = sizeof(PacketCreatePlayer);
 	Header->byType = dfPACKET_SC_CREATE_MY_CHARACTER;

@@ -89,6 +89,7 @@ void netProc_Accept() {
 	newSession->chHP = 100;
 	newSession->shX = Packet.X;
 	newSession->shY = Packet.Y;
+	newSession->dwAction = dfACTION_STOP;
 	InetNtopW(AF_INET, &clientAddr.sin_addr, newSession->ip, 16);
 	newSession->port = ntohs(clientAddr.sin_port);
 
@@ -341,10 +342,6 @@ bool netPacketProc_MoveStop(st_SESSION* pSession, char* pPacket) {
 		return false;
 	}
 
-	//-----------------------------------------------------
-	// 동작을 변경. 지금 구현에선 동작번호가 방향값이다
-	//-----------------------------------------------------
-	pSession->dwAction = pStop->Direction;
 
 	//-----------------------------------------------------
 	// 방향을 변경.
@@ -362,6 +359,12 @@ bool netPacketProc_MoveStop(st_SESSION* pSession, char* pPacket) {
 		pSession->byDirection = dfPACKET_MOVE_DIR_LL;
 		break;
 	}
+
+	//-----------------------------------------------------
+	// 동작을 변경. 지금 구현에선 동작번호가 방향값이다
+	//-----------------------------------------------------
+	pSession->dwAction = dfACTION_STOP;
+
 
 
 	pSession->shX = pStop->X;

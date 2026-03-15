@@ -148,7 +148,10 @@ struct Packet_CS_Move_Start {
 #define dfPACKET_MOVE_DIR_RD					5
 #define dfPACKET_MOVE_DIR_DD					6
 #define dfPACKET_MOVE_DIR_LD					7
-
+#define dfACTION_STOP  0xFF
+// 이동속도 프레임
+#define dfSPEED_X  3
+#define dfSPEED_Y  2
 
 
 

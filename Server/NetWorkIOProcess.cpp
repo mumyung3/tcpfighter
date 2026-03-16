@@ -87,19 +87,23 @@ void netProc_Accept() {
 	// 플레이어 생성 패킷 생성
 	PacketCreatePlayer Packet{};
 	PacketHeader Header = CreatePacketHeader();
+
 	CreatePacketPlayer(&Header, &Packet);
-	SendUnicast(newSession, &Header, (void*)&Packet);
-	newSession->chHP = 100;
+
+	newSession->chHP = Packet.HP;
 	newSession->shX = Packet.X;
 	newSession->shY = Packet.Y;
 	newSession->dwAction = dfACTION_STOP;
+
 	InetNtopW(AF_INET, &clientAddr.sin_addr, newSession->ip, 16);
 	newSession->port = ntohs(clientAddr.sin_port);
 
+	SendUnicast(newSession, &Header, (void*)&Packet);
 
 	newSession->bDisconnect = false;
 	newSession->next = g_PlayerList.head;
 	g_PlayerList.head = newSession;
+
 
 	wprintf(L"클라 접속 : IP=%s PORT=%d ID=%d\n", newSession->ip, newSession->port, newSession->dwSessionID);
 
@@ -121,6 +125,10 @@ void netProc_Accept() {
 		SendUnicast(newSession, &OtherHeader, &OtherPacket);
 	}
 	g_id++;
+
+	// netProc_Accept
+	wprintf(L"Create Character # SessionID:%d\tX:%d\tY:%d\n", newSession->dwSessionID, newSession->shX, newSession->shY);
+
 
 }
 
@@ -347,6 +355,11 @@ bool netPacketProc_MoveStart(st_SESSION* pSession, char* pPacket) {
 	CreatePacketSCMoveStart(&Header, &Packet, pSession->dwSessionID, pSession->byDirection, pSession->shX, pSession->shY);
 	// 센드 브로드 캐스트 (나 제외)
 	SendBroadcast(pSession, &Header, &Packet);
+
+	// netPacketProc_MoveStart
+	wprintf(L"# PACKET_MOVESTART # SessionID:%d / Direction:%d / X:%d / Y:%d\n", pSession->dwSessionID, pSession->byDirection, pSession->shX, pSession->shY);
+
+
 	return true;
 }
 bool netPacketProc_MoveStop(st_SESSION* pSession, char* pPacket) {
@@ -398,6 +411,10 @@ bool netPacketProc_MoveStop(st_SESSION* pSession, char* pPacket) {
 	CreatePacketSCMoveStop(&Header, &Packet, pSession->dwSessionID, pSession->byDirection, pSession->shX, pSession->shY);
 	// 센드 브로드 캐스트 (나 제외)
 	SendBroadcast(pSession, &Header, &Packet);
+
+	// netPacketProc_MoveStart
+	wprintf(L"# PACKET_MOVESTOP # SessionID:%d / Direction:%d / X:%d / Y:%d\n", pSession->dwSessionID, pSession->byDirection, pSession->shX, pSession->shY);
+
 
 	return true;
 }

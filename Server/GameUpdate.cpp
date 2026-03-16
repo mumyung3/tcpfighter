@@ -46,5 +46,11 @@ void UpdateGame() {
 		if (pSession->shX > dfRANGE_MOVE_RIGHT)  pSession->shX = dfRANGE_MOVE_RIGHT;
 		if (pSession->shY < dfRANGE_MOVE_TOP)    pSession->shY = dfRANGE_MOVE_TOP;
 		if (pSession->shY > dfRANGE_MOVE_BOTTOM) pSession->shY = dfRANGE_MOVE_BOTTOM;
+
+		//// UpdateGame 이동 처리 후
+		if (pSession->dwAction < 8) {
+			const wchar_t* dirStr[] = { L"LL", L"LU", L"UU", L"RU", L"RR", L"RD", L"DD", L"LD" };
+			wprintf(L"# gameRun:%s # SessionID:%d / X:%d / Y:%d\n", dirStr[pSession->dwAction], pSession->dwSessionID, pSession->shX, pSession->shY);
+		}
 	}
 }

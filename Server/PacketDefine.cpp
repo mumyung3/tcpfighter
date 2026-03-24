@@ -1,6 +1,6 @@
 #include "PacketDefine.h"
 #include "NetWorkIOProcess.h"
-
+#include "GameUpdate.h"
 PacketHeader CreatePacketHeader() {
 	PacketHeader Packet{};
 	Packet.byCode = 0x89;
@@ -15,7 +15,7 @@ void CreatePacketPlayer(PacketHeader* Header, PacketCreatePlayer* Player) {
 	Header->byCode = 0x89;
 	Header->bySize = sizeof(PacketCreatePlayer);
 	Header->byType = dfPACKET_SC_CREATE_MY_CHARACTER;
-	Player->ID = g_id;
+	Player->ID = g_ID;
 	Player->Direction = rand() % 8;
 	Player->X = dfRANGE_MOVE_LEFT + rand() % (dfRANGE_MOVE_RIGHT - dfRANGE_MOVE_LEFT + 1);
 	Player->Y = dfRANGE_MOVE_TOP + rand() % (dfRANGE_MOVE_BOTTOM - dfRANGE_MOVE_TOP + 1);

@@ -1,31 +1,10 @@
 #pragma once
 
-#include <WinSock2.h>
-#include <WS2tcpip.h>
-#include <Windows.h>
-#include <stdio.h>
-#pragma comment(lib, "ws2_32.lib")
-
-#include <tchar.h>
-#include <Windows.h>
-#include <timeapi.h>
-#pragma comment(lib, "winmm.lib")
-
 #include "ringbuffer.h"
-//#include "NetWorkIOProcess.h"
-#include "locale.h"
-
-#include "GameUpdate.h"
-
-#define SERVERPORT 5000
-#define SERVERIP L"192.168.10.100"
-
-extern bool g_bShutdown;
-
+#include <Windows.h>
 
 // 세션 + 플레이어 객체
 struct st_SESSION {
-
 	SOCKET Socket;		// 소켓
 	DWORD dwSessionID;	// 고유 세션 id
 	RingBuffer RecvQ;	// 송수신 큐
@@ -60,14 +39,7 @@ struct SessionList {
 	Iterator end() { return { nullptr }; }
 };
 
-
+extern bool g_bShutdown;
 extern SessionList g_PlayerList;
-
 extern SOCKET g_ListenSocket;
-
-// 세션 id	 고유
-extern DWORD g_id;
-
-
-void cs_Initial(void);
-void cs_MoveCursor(int iPosX, int iPosY);
+extern DWORD g_ID;

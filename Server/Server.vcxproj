@@ -90,6 +90,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <Optimization>Disabled</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -127,10 +129,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="common.h" />
     <ClInclude Include="GameUpdate.h" />
     <ClInclude Include="NetWorkIOProcess.h" />
     <ClInclude Include="PacketDefine.h" />
     <ClInclude Include="ringbuffer.h" />
+    <ClInclude Include="Serialization.h" />
     <ClInclude Include="Server.h" />
   </ItemGroup>
   <ItemGroup>
@@ -138,6 +142,7 @@
     <ClCompile Include="NetWorkIOProcess.cpp" />
     <ClCompile Include="PacketDefine.cpp" />
     <ClCompile Include="ringbuffer.cpp" />
+    <ClCompile Include="Serialization.cpp" />
     <ClCompile Include="Server.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

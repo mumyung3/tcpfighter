@@ -1,4 +1,12 @@
+#include <WinSock2.h>
+#pragma comment(lib, "ws2_32.lib")
 #include "NetWorkIOProcess.h"
+#include <WS2tcpip.h>
+#include "GameUpdate.h"
+#include <stdio.h>
+
+// 임시 버퍼 삭제후, 로컬 버퍼 없는 링버퍼 적용 예정
+#define TEMP_BUFSIZE 10000
 
 void NetIOProcess() {
 	st_SESSION* pSession;
@@ -25,8 +33,8 @@ void NetIOProcess() {
 	// 게임 프레임 처리를 위한 timeval 0,0
 	timeval Time{};
 
-	int iResult, iCnt;
-	bool bProcFlag;
+	int iResult{}, iCnt{};
+	bool bProcFlag{};
 
 	Time.tv_sec = 0;
 	Time.tv_usec = 0;
@@ -75,14 +83,13 @@ void netProc_Accept() {
 	SOCKET clientSock = accept(g_ListenSocket, (SOCKADDR*)&clientAddr, &addrLen);
 	if (clientSock == INVALID_SOCKET) {
 		wprintf(L"accept 실패 : %d\n", WSAGetLastError());
-		g_bShutdown = true;
 		return;
 	}
 
 	// g_playerlist 추가
 	st_SESSION* newSession = new st_SESSION();
 	newSession->Socket = clientSock;
-	newSession->dwSessionID = g_id;
+	newSession->dwSessionID = g_ID;
 
 	// 플레이어 생성 패킷 생성
 	PacketCreatePlayer Packet{};
@@ -124,7 +131,7 @@ void netProc_Accept() {
 		CreatePacketOtherPlayer(&OtherHeader, &OtherPacket, pOther->dwSessionID, pOther->byDirection, pOther->shX, pOther->shY, pOther->chHP);
 		SendUnicast(newSession, &OtherHeader, &OtherPacket);
 	}
-	g_id++;
+	g_ID++;
 
 	// netProc_Accept
 	wprintf(L"Create Character # SessionID:%d\tX:%d\tY:%d\n", newSession->dwSessionID, newSession->shX, newSession->shY);
@@ -135,7 +142,7 @@ void netProc_Accept() {
 void netProc_Recv(st_SESSION* pSession) {
 
 	// 임시 수신 버퍼 선언 최대 10000 바이트ㅡ
-	char chTemp[TEMP_BUFSIZE] = { 0, };
+	char chTemp[TEMP_BUFSIZE] = {};
 
 	//recv 호출
 	int recvRet = recv(pSession->Socket, chTemp, TEMP_BUFSIZE, 0);
@@ -198,7 +205,7 @@ void netProc_Recv(st_SESSION* pSession) {
 void netProc_Send(st_SESSION* pSession) {
 
 	// 임시 수신 버퍼 선언 최대 10000 바이트ㅡ
-	char chTemp[TEMP_BUFSIZE] = { 0, };
+	char chTemp[TEMP_BUFSIZE] = {};
 
 	// 송신 버퍼 여유 생김 (못 보낸 거 이어서 전송)
 	if (pSession->SendQ.GetUseSize() == 0) {
@@ -212,7 +219,6 @@ void netProc_Send(st_SESSION* pSession) {
 
 	if (retSend == SOCKET_ERROR) {
 		if (WSAGetLastError() != WSAEWOULDBLOCK) {
-			closesocket(pSession->Socket);
 			// 디스 커넥트
 			Disconnect(pSession);
 		}
@@ -327,23 +333,6 @@ bool netPacketProc_MoveStart(st_SESSION* pSession, char* pPacket) {
 	// 동작을 변경. 지금 구현에선 동작번호가 방향값이다
 	//-----------------------------------------------------
 	pSession->dwAction = pMove->Direction;
-
-	//-----------------------------------------------------
-	// 방향을 변경.
-	//-----------------------------------------------------
-	switch (pMove->Direction)
-	{
-	case dfPACKET_MOVE_DIR_RR:
-	case dfPACKET_MOVE_DIR_RU:
-	case dfPACKET_MOVE_DIR_RD:
-		pSession->byDirection = dfPACKET_MOVE_DIR_RR;
-		break;
-	case dfPACKET_MOVE_DIR_LU:
-	case dfPACKET_MOVE_DIR_LL:
-	case dfPACKET_MOVE_DIR_LD:
-		pSession->byDirection = dfPACKET_MOVE_DIR_LL;
-		break;
-	}
 
 	//dfERROR_RANGE
 	pSession->shX = pMove->X;

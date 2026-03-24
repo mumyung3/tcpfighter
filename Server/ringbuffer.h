@@ -1,6 +1,5 @@
 #pragma once
-#include <algorithm>
-#include <Windows.h>
+
 
 #define BUFSIZE 50000
 #define RINGBUFFER_ERROR_NOSPACE -1  // 인큐: 남은 공간 부족

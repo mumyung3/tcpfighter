@@ -451,6 +451,14 @@ bool netPacketProc_Attack1(st_SESSION* pSession, char* pPacket) {
 				PacketHeader DmgHeader = CreatePacketHeader();
 				Packet_SC_Damage DmgPacket{};
 				CreatePacketSCDamage(&DmgHeader, &DmgPacket, pSession->dwSessionID, pTarget->dwSessionID, pTarget->chHP);
+				//직렬화 버퍼 넣는다면, 코드 텍스트기로 만든 함수 호출
+				// CreatePacketSCDamge(&CPacket, pSession->dwSessionID, pTarget->dwSessionID, pTarget->chHP );
+				// SendPacket(CPacket);
+
+				//Item 자료형이라면? CPacket << Item; (id, x,y)
+				// 원래라면 , cPacket << cnt 후에 cPacket << Item cnt만큼 반복
+				// 이거 조차 ItemList로 만들어서 cPacket << ItemList 가능 
+
 				SendBroadcast(nullptr, &DmgHeader, &DmgPacket);
 				if (pTarget->chHP <= 0)
 					Disconnect(pTarget);

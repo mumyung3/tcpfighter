@@ -141,11 +141,7 @@ void netProc_Accept() {
 
 void netProc_Recv(st_SESSION* pSession) {
 
-	// 임시 수신 버퍼 선언 최대 10000 바이트ㅡ
 	char chTemp[TEMP_BUFSIZE] = {};
-
-	//recv 호출
-	//int recvRet = recv(pSession->Socket, chTemp, TEMP_BUFSIZE, 0);
 
 	// recv 전에 체크 추가
 	if (pSession->RecvQ.DirectEnqueueSize() == 0) return;
@@ -200,12 +196,6 @@ void netProc_Recv(st_SESSION* pSession) {
 		// 5. 데이터 peek 했던 헤더를 recvq에서 지우고 (또 뺄 필요없음. 이미 뺐으니)
 		pSession->RecvQ.MoveFront(sizeof(PacketHeader));
 
-		// 6. recq 에서 len 만큼 임시 패킷 버퍼로 뽑음.
-		//pSession->RecvQ.Dequeue(chTemp, header.bySize);
-
-		// 7. 헤더의 타입에 따른 분기를 위해 패킷 프로시저 호출
-		//PacketProc(pSession, header.byType, chTemp);
-
 		// Dequeue 없이 직접 포인터 넘기기
 		if (pSession->RecvQ.DirectDequeueSize() >= header.bySize) {
 			PacketProc(pSession, header.byType, pSession->RecvQ.GetFrontBufferPtr());
@@ -224,20 +214,13 @@ void netProc_Recv(st_SESSION* pSession) {
 
 void netProc_Send(st_SESSION* pSession) {
 
-	// 임시 수신 버퍼 선언 최대 10000 바이트ㅡ
-	//char chTemp[TEMP_BUFSIZE] = {};
-
 	// 송신 버퍼 여유 생김 (못 보낸 거 이어서 전송)
 	if (pSession->SendQ.GetUseSize() == 0) {
 		// 보낼게 없음.
 		return;
 	}
-	//int sendSize = pSession->SendQ.GetUseSize();
 	int sendSize = pSession->SendQ.DirectDequeueSize();
 
-	//pSession->SendQ.Peek(chTemp, sendSize);
-
-	//int retSend = send(pSession->Socket, chTemp, sendSize, 0);
 	int retSend = send(pSession->Socket, pSession->SendQ.GetFrontBufferPtr(), sendSize, 0);
 
 	if (retSend == SOCKET_ERROR) {

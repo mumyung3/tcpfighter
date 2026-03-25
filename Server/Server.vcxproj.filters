@@ -27,13 +27,10 @@
     <ClInclude Include="PacketDefine.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="ringbuffer.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Serialization.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="common.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Output.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -50,10 +47,13 @@
     <ClCompile Include="PacketDefine.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="ringbuffer.cpp">
+    <ClCompile Include="..\..\직렬화버퍼\Serialization\Serialization\Serialization.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Serialization.cpp">
+    <ClCompile Include="..\..\링버퍼\RingBuffer\RingBuffer\ringbuffer.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Output.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

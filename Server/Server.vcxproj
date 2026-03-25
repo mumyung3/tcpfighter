@@ -92,6 +92,7 @@
       <ConformanceMode>true</ConformanceMode>
       <Optimization>Disabled</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\직렬화버퍼\Serialization\Serialization\;$(SolutionDir)..\링버퍼\RingBuffer\RingBuffer\;$(SolutionDir)..\직렬화코드생성기\코드생성기\Release\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -132,17 +133,17 @@
     <ClInclude Include="common.h" />
     <ClInclude Include="GameUpdate.h" />
     <ClInclude Include="NetWorkIOProcess.h" />
+    <ClInclude Include="Output.h" />
     <ClInclude Include="PacketDefine.h" />
-    <ClInclude Include="ringbuffer.h" />
-    <ClInclude Include="Serialization.h" />
     <ClInclude Include="Server.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\링버퍼\RingBuffer\RingBuffer\ringbuffer.cpp" />
+    <ClCompile Include="..\..\직렬화버퍼\Serialization\Serialization\Serialization.cpp" />
     <ClCompile Include="GameUpdate.cpp" />
     <ClCompile Include="NetWorkIOProcess.cpp" />
+    <ClCompile Include="Output.cpp" />
     <ClCompile Include="PacketDefine.cpp" />
-    <ClCompile Include="ringbuffer.cpp" />
-    <ClCompile Include="Serialization.cpp" />
     <ClCompile Include="Server.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

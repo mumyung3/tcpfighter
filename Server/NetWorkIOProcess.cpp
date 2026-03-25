@@ -4,7 +4,7 @@
 #include <WS2tcpip.h>
 #include "GameUpdate.h"
 #include <stdio.h>
-
+#include "output.h"
 // 임시 버퍼 삭제후, 로컬 버퍼 없는 링버퍼 적용 예정
 #define TEMP_BUFSIZE 10000
 
@@ -94,6 +94,8 @@ void netProc_Accept() {
 	// 플레이어 생성 패킷 생성
 	PacketCreatePlayer Packet{};
 	PacketHeader Header = CreatePacketHeader();
+	//CPacket clpPacket{};
+	//Create_PacketCreatePlayer(CPacket * clpPacket, unsigned long ID, char Direction, unsigned short X, unsigned short Y, char HP);
 
 	CreatePacketPlayer(&Header, &Packet);
 
@@ -321,28 +323,34 @@ void CleanupDisconnected() {
 }
 
 bool netPacketProc_MoveStart(st_SESSION* pSession, char* pPacket) {
-	Packet_CS_Move_Start* pMove = (Packet_CS_Move_Start*)pPacket;
-	pSession->byDirection = pMove->Direction;
+	CPacket cPacket{ pPacket,sizeof(Packet_CS_Move_Start) };
+	//Packet_CS_Move_Start* pMove = (Packet_CS_Move_Start*)pPacket;
+	char Direction;
+	unsigned short X;
+	unsigned short Y;
+	Parse_Packet_CS_Move_Start(&cPacket, Direction, X, Y);
 
+	//pSession->byDirection = pMove->Direction;
+	pSession->byDirection = Direction;
 	// 오차 범위 무시하기
-	if (abs(pSession->shX - pMove->X) > dfERROR_RANGE ||
-		abs(pSession->shY - pMove->Y) > dfERROR_RANGE)
+	if (abs(pSession->shX - X) > dfERROR_RANGE ||
+		abs(pSession->shY - Y) > dfERROR_RANGE)
 	{
 		Disconnect(pSession);
 		// 로그출력
 		wprintf(L"오차범위 초과 - 서버X:%d 클X:%d 서버Y:%d 클Y:%d\n",
-			pSession->shX, pMove->X, pSession->shY, pMove->Y);
+			pSession->shX, X, pSession->shY, Y);
 		return false;
 	}
 
 	//-----------------------------------------------------
 	// 동작을 변경. 지금 구현에선 동작번호가 방향값이다
 	//-----------------------------------------------------
-	pSession->dwAction = pMove->Direction;
+	pSession->dwAction = Direction;
 
 	//dfERROR_RANGE
-	pSession->shX = pMove->X;
-	pSession->shY = pMove->Y;
+	pSession->shX = X;
+	pSession->shY = Y;
 
 
 	PacketHeader Header = CreatePacketHeader();
